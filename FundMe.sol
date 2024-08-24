@@ -45,16 +45,19 @@ contract FundMe {
             addressToAmountFunded[funder] = 0;
         }
         funders = new address[](0);
-        // // transfer
+        // // TRANSFER
         // payable(msg.sender).transfer(address(this).balance);
-        // // send
+        // // SEND
         // bool sendSuccess = payable(msg.sender).send(address(this).balance);
         // require(sendSuccess, "Send failed");
-        // call
+        // // CALL (very strong function - used to perform low level operations.)
         (bool callSuccess, ) = payable(msg.sender).call{value: address(this).balance}("");
         require(callSuccess, "Call failed");
     }
     // Explainer from: https://solidity-by-example.org/fallback/
+    // SO MANY SPECIAL FUNCTIONS ARE THERE IN SOLIDITY.
+    // eg. receive(), fallback(), etc.
+
     // Ether is sent to contract
     //      is msg.data empty?
     //          /   \ 
@@ -66,6 +69,7 @@ contract FundMe {
     //  /        \
     //receive()  fallback()
 
+    // if there is no message with transaction fallback() will be called, else receive() will be called.
     fallback() external payable {
         fund();
     }
